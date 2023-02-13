@@ -25,13 +25,13 @@ SECRET_KEY = 'nhd33h10=h7loxt^0(2ql2(z7ple!+2hym^v6uge=vh=5t=+um'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
 
 CUSTOM_APPS = [
-    "welcome"
+    "welcome",
 ]
 
 THIRD_PARTY_APPS = [

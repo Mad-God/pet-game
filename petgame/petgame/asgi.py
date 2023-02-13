@@ -13,14 +13,14 @@ from django.core.asgi import get_asgi_application
 from channels.routing import ProtocolTypeRouter, URLRouter
 from channels.auth import AuthMiddlewareStack
 import welcome.routing
-
+import django
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'petgame.settings')
-
+django.setup()
 application = ProtocolTypeRouter(
     {
         "http": get_asgi_application(),
-        # "websocket": AuthMiddlewareStack(URLRouter("welcome.routing.websocket_urlpatterns")),
-        "websocket": URLRouter("welcome.routing.websocket_urlpatterns"),
+        "websocket": AuthMiddlewareStack(URLRouter(welcome.routing.websocket_urlpatterns)),
+        # "websocket": URLRouter("welcome.routing.websocket_urlpatterns"),
 
     }
 )

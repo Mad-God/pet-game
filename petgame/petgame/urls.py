@@ -21,6 +21,7 @@ from welcome.views import *
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include("welcome.urls")),
-    re_path(r'^/(?P<example_param>[\w-]+)/$', redirect_to_default, name="redirect-default"),
+    # re_path(r'^/(?P<example_param>[\w-]+)/$', redirect_to_default, name="redirect-default"),
 
 ]
+# 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
