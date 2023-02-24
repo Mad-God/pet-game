@@ -5,7 +5,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { set as setName } from "../../store/name";
 import { set as setNames } from "../../store/names";
 
-
 function ChooseName({}) {
   // const [names, setNames] = useState([]);
   const lobby = useSelector((state) => state.lobby);
@@ -17,6 +16,7 @@ function ChooseName({}) {
   useEffect(() => {
     (async () => {
       // get the names of players joined in current lobby
+      console.log(lobby);
       const res = await axios.get(
         `http://${
           window.location.toString().split(":")[1]
@@ -28,41 +28,41 @@ function ChooseName({}) {
         }
       );
       dispatch(setNames(res.data.names));
+      console.log("reponse: ", res);
+      console.log("names: ", res.data.names);
     })();
-    console.log("lobby: ", lobby);
-    return ()=>{
-      
-    }
+    return () => {
+      console.log("exited chooseName Component");
+    };
   }, []);
 
   function set_name_from_input(event) {
     dispatch(setName(event.target.value));
   }
 
+  // return <>Hello</>;
 
   return (
     <div className="container d-block bg-success py-5 align-items-center justify-content-center">
       <div className="align-items-center d-flex flex-column w-100">
         <h1 className="m-2 text-primary fw-bold text-bg-dark px-4 w-100">
-          You're in Lobby: {lobby}
+          You're in Lobby: {lobby.id}
         </h1>
-        <hr></hr>
-        {console.log(names)}
-        
+
         <div className="mx-auto">
           {/* if there are some players already joined in the lobby, show their list */}
           {names.length > 0 ? (
             <div>
-            <h3>Currently Joined in lobby: </h3>
-            <div className="row">
+              <h3>Currently Joined in lobby: </h3>
+              <div className="row">
                 {names.map((item, index) => {
                   return (
                     <div key={new Date().getTime() + index} className="col-3">
-                    {/* <React.Fragment key={new Date().getTime() + index}> */}
-                      <p className="m-3 form-control-lg bg-opacity-75 bg-dark">{item}</p>
+                      <p className="m-3 form-control-lg bg-opacity-75 bg-dark">
+                        {item}
+                      </p>
                       <br />
-                    {/* </React.Fragment> */}
-                  </div>
+                    </div>
                   );
                 })}
               </div>

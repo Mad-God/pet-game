@@ -1,13 +1,13 @@
-const { createSlice } = require('@reduxjs/toolkit');
+const { createSlice } = require("@reduxjs/toolkit");
 
 const namesSlice = createSlice({
-    name: 'names',
-    initialState: [],
-    reducers: {
-        set(state, action) {
-            return action.payload;
-        },
+  name: "names",
+  initialState: [],
+  reducers: {
+    set(state, action) {
+      state = action.payload;
     },
+  },
 });
 
 export const { set } = namesSlice.actions;

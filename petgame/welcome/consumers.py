@@ -10,19 +10,58 @@ from .models import Lobby, Name
 
 
 class ChatConsumer(WebsocketConsumer):
+    """
+    MESSAGE TYPES:
+        on client connect:
+            add the client name to Lobby
+            assign a position in the maze to client
+            client recieve "connected" and maze status
+            peers recieve "xyz" joined and client's position
+            update the maze
+            return the maze to client
+            
+        
+        on message recieve from client:
+            get the position, sender, plant type
+            update the maze
+            send message to all peers about new plant
+
+        # on message send from client:
+        #     update the maze
+        #     send position, client name, plant type
+
+        on client disconnect:
+            remove all plants from client
+            client recieve "disconnected"
+            if anymore clients are left, 
+                peers recieve "xyz left"
+                update maze
+                send maze to all the clients
+            else
+                delete lobby
+                delete maze
+    
+    """
     joined_players = []
     def connect(self):
-        # for initial request that comes in from client
+        """
+        on client connect:
+            add the client name to Lobby
+            assign a position in the maze to client
+            client recieve "connected" and maze status
+            peers recieve "xyz" joined and client's position
+            update the maze
+            return the maze to client
+        """
         self.accept()
-        print("websocket request url:", self.scope["path"])
+        
         # set lobby and create a lobby instance
         self.room_group_name = self.scope["path"].split("/")[-2]
-        lobby, created = Lobby.objects.get_or_create(number=self.scope["path"].split("/")[-2])
+        lobby = Lobby.objects.get(number=self.scope["path"].split("/")[-2])
 
         # add player to lobby, and webSocket layer
-        user, created = Name.objects.get_or_create(name=self.scope["path"].split("/")[-1])
-        user.lobby = lobby
-        user.save()
+        user, created = Name.objects.get_or_create(name=self.scope["path"].split("/")[-1], lobby=lobby)
+        
         async_to_sync(self.channel_layer.group_add)(
             self.room_group_name,
             self.channel_name,
